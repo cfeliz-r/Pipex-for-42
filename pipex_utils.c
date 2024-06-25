@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:14:45 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/24 15:14:48 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/25 18:52:02 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,41 +30,23 @@ void	cleanup(char **args, char *path, char **paths)
 	free(args);
 }
 
-char	*find_command_path(char *cmd, char **envp)
-{
-	char	*res;
-	char	**paths;
-	int		i;
-
-	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 4) == 0)
-		i++;
-	paths = ft_split(envp[i] + 5, ':');
-	i = 0;
-	while (paths[i])
-	{
-		res = join_paths(paths[i], cmd);
-		if (access(res, F_OK) == 0)
-		{
-			free(paths);
-			return (res);
-		}
-		free(res);
-		i++;
-	}
-	free_paths(paths);
-	return (NULL);
-}
-
 void	execute_command(char **cmd, char **envp)
 {
 	char	*path;
 
 	path = find_command_path(cmd[0], envp);
-	if (!path)
-		error();
+	if (path == NULL)
+	{
+		ft_putstr_fd("Error: PATH variable not found\n", 2);
+		cleanup(cmd, NULL, NULL);
+		exit(EXIT_FAILURE);
+	}
 	if (execve(path, cmd, envp) == -1)
-		error();
+	{
+		perror("Error in execve");
+		cleanup(cmd, path, NULL);
+		exit(EXIT_FAILURE);
+	}
 }
 
 char	*join_paths(char *dir, char *cmd)
@@ -76,14 +58,4 @@ char	*join_paths(char *dir, char *cmd)
 	result = ft_strjoin(full_path, cmd);
 	free(full_path);
 	return (result);
-}
-
-void	free_paths(char **paths)
-{
-	int	i;
-
-	i = -1;
-	while (paths[++i])
-		free(paths[i]);
-	free(paths);
 }

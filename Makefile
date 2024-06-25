@@ -6,13 +6,13 @@
 #    By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/24 15:15:06 by cfeliz-r          #+#    #+#              #
-#    Updated: 2024/06/24 17:57:39 by cfeliz-r         ###   ########.fr        #
+#    Updated: 2024/06/25 18:16:08 by cfeliz-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
-SRC = pipex.c pipex_utils.c
+SRC = pipex.c pipex_utils.c check_and_path.c
 OBJ = $(SRC:.c=.o)
 EXEC = pipex
 INFILE = infile
