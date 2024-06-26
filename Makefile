@@ -6,29 +6,27 @@
 #    By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/24 15:15:06 by cfeliz-r          #+#    #+#              #
-#    Updated: 2024/06/25 18:16:08 by cfeliz-r         ###   ########.fr        #
+#    Updated: 2024/06/26 19:43:22 by cfeliz-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+SRCS = pipex.c utils.c check_and_path.c
+OBJS = ${SRCS:.c=.o}
+NAME = pipex
+LIBFT = libft.a
+LIBFT_PATH = ./libft/
+RM = rm -f
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address,undefined,leak
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
-SRC = pipex.c pipex_utils.c check_and_path.c
-OBJ = $(SRC:.c=.o)
-EXEC = pipex
 INFILE = infile
 OUTFILE = outfile
-LIBDIR = ./libft
-LIB = libft.a
 
-all: $(INFILE) $(OUTFILE) $(LIBDIR)/$(LIB) $(EXEC)
+all:		${NAME}
+${NAME}:	${OBJS} ${LIBFT_PATH}${LIBFT} ${INFILE} ${OUTFILE}
+			@${CC} ${CFLAGS} ${OBJS} ${LIBFT_PATH}${LIBFT} -o ${NAME}
 
-
-$(EXEC): $(OBJ)
-	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ) -L$(LIBDIR) -lft
-
-
-%.o: %.c pipex.h
-	$(CC) $(CFLAGS) -c $< -o $@
+${LIBFT_PATH}${LIBFT}:	
+			@make -C ${LIBFT_PATH} --silent
 
 $(INFILE):
 	@touch $(INFILE)
@@ -36,18 +34,15 @@ $(INFILE):
 $(OUTFILE):
 	@touch $(OUTFILE)
 
-$(LIBDIR)/$(LIB):
-	$(MAKE) -C $(LIBDIR)
-	cp $(LIBDIR)/$(LIB) .
-
 clean:
-	@rm -f $(OBJ)
-	$(MAKE) -C $(LIBDIR) clean
+	@${RM} ${OBJS} ${INFILE} ${OUTFILE}
+	@make clean -C ${LIBFT_PATH}
+	@echo "Cleaned object files."
 
-fclean: clean
-	@rm -f $(EXEC)  $(INFILE) $(OUTFILE) $(LIB)
-	$(MAKE) -C $(LIBDIR) fclean
+fclean:		clean
+	@${RM} ${NAME} ${LIBFT_PATH}${LIBFT}
+	@echo "Cleaned executable and library."
 
-re: fclean all
+re:		fclean all
 
 .PHONY: all clean fclean re

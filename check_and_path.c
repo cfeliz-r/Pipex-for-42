@@ -6,13 +6,24 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:27:25 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/25 19:04:55 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/26 18:55:07 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	free_paths(char **paths)
+static char	*join_paths(char *dir, char *cmd)
+{
+	char	*full_path;
+	char	*result;
+
+	full_path = ft_strjoin(dir, "/");
+	result = ft_strjoin(full_path, cmd);
+	free(full_path);
+	return (result);
+}
+
+static void	free_paths(char **paths)
 {
 	int	i;
 
@@ -27,11 +38,11 @@ static char	**get_paths(char **envp)
 	int	i;
 
 	i = 0;
-	while (envp[i] && ft_strnstr(envp[i], "PATH", 4) == 0)
+	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == 0)
 		i++;
-	if (envp[i] == NULL)
+	if(!envp[i])
 		return (NULL);
-	return (ft_split(envp[i] + 5, ':'));
+	return (ft_split(envp[i] + 6, ':'));
 }
 
 static char	*search_paths(char **paths, char *cmd)
