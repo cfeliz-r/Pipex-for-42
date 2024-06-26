@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:12:27 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/26 19:56:02 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/26 20:07:53 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	display_argument_error(void)
 
 void	error(char *str)
 {
-	perror("Error");
+	perror("Error: ");
 	ft_putstr(str);
 	exit(EXIT_FAILURE);
 }
