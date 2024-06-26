@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 15:13:02 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/26 19:56:21 by cfeliz-r         ###   ########.fr       */
+/*   Created: 2024/06/26 19:57:11 by cfeliz-r          #+#    #+#             */
+/*   Updated: 2024/06/26 20:05:53 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include <errno.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
-# include <stdio.h>
-# include <sys/wait.h>
-# include <fcntl.h>
-# include "libft/libft.h"
+#include "libft.h"
+static void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+void	ft_putstr(char *str)
+{
+	int	i;
 
-char	*find_command_path(char *cmd, char **envp);
-void	error(char *str);
-void	execute_command(char **cmd, char **envp);
-void	cleanup(char **args, char *path, char **paths);
-
-#endif
+	i = 0;
+	while (str[i])
+	{
+		ft_putchar(str[i]);
+		i++;
+	}
+}

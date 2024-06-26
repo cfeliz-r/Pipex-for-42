@@ -6,7 +6,7 @@
 #    By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/04 14:53:34 by cfeliz-r          #+#    #+#              #
-#    Updated: 2024/06/24 15:01:56 by cfeliz-r         ###   ########.fr        #
+#    Updated: 2024/06/26 19:59:44 by cfeliz-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ SRCS		= ft_atoi.c \
 		  ft_strcmp.c \
 		  ft_printf.c \
 		  ft_number.c \
+		  ft_putstr.c \
 		  ft_words.c \
 		  get_next_line/get_next_line.c \
 		  get_next_line/get_next_line_utils.c \

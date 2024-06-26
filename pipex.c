@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:12:27 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/26 19:40:45 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/26 19:56:02 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ static void	display_argument_error(void)
 	ft_putstr_fd("Usage: ./pipex <file1> <cmd1> <cmd2> <file2>\n", 1);
 }
 
-void	error(void)
+void	error(char *str)
 {
 	perror("Error");
+	ft_putstr(str);
 	exit(EXIT_FAILURE);
 }
 
@@ -31,7 +32,7 @@ static void	handle_child_process(char *input_file, char **cmd1, \
 
 	infile = open(input_file, O_RDONLY);
 	if (infile == -1)
-		error();
+		error("Open infile");
 	dup2(fd[1], STDOUT_FILENO);
 	dup2(infile, STDIN_FILENO);
 	close(fd[0]);
@@ -46,7 +47,7 @@ static void	handle_parent_process(char *output_file, char **cmd2, \
 
 	outfile = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (outfile == -1)
-		error();
+		error("Open outfile");
 	dup2(fd[0], STDIN_FILENO);
 	dup2(outfile, STDOUT_FILENO);
 	close(fd[1]);
@@ -67,10 +68,10 @@ int	main(int argc, char **argv, char **envp)
 	if (argc == 5)
 	{
 		if (pipe(fd) == -1)
-			error();
+			error("pipe error");
 		pid = fork();
 		if (pid == -1)
-			error();
+			error("pipe error");
 		if (pid == 0)
 			handle_child_process(argv[1], ft_split(argv[2], ' '), envp, fd);
 		else
