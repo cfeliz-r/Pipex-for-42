@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:14:45 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/26 19:47:06 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/27 20:14:08 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,21 @@ void	cleanup(char **args, char *path, char **paths)
 	free(args);
 }
 
-void	execute_command(char **cmd, char **envp)
+void	display_argument_error(void)
 {
-	char	*path;
+	ft_putstr_fd("Error: Bad arguments\n", 2);
+	ft_putstr_fd("Usage: ./pipex <file> <cmd1> <cmd2> ... <file>\n", 1);
+}
 
-	path = find_command_path(cmd[0], envp);
-	if (path == NULL)
-	{
-		perror("PATH Not found");
-		cleanup(cmd, NULL, NULL);
-		exit(EXIT_FAILURE);
-	}
-	if (execve(path, cmd, envp) == -1)
-	{
-		perror("Error in execve");
-		cleanup(cmd, path, NULL);
-		exit(EXIT_FAILURE);
-	}
+void	error(char *str)
+{
+	ft_putstr(str);
+	exit(EXIT_FAILURE);
+}
+
+void	close_fds(int fd[2], int prev_fd)
+{
+	close(fd[1]);
+	if (prev_fd != -1)
+		close(prev_fd);
 }

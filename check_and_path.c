@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:27:25 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/26 19:45:30 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/27 20:14:31 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ static char	**get_paths(char **envp)
 	int	i;
 
 	i = 0;
-	while (envp[i] && ft_strnstr(envp[i], "PATH=", 5) == 0)
+	while (envp[i] && ft_strnstr(envp[i], "PATH", 4) == 0)
 		i++;
 	if (!envp[i])
 		return (NULL);
-	return (ft_split(envp[i] + 6, ':'));
+	return (ft_split(envp[i] + 5, ':'));
 }
 
 static char	*search_paths(char **paths, char *cmd)

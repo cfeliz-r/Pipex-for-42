@@ -3,82 +3,98 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: cfeliz-r <cfeliz-r@student.your42network.  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 15:12:27 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/26 20:07:53 by cfeliz-r         ###   ########.fr       */
+/*   Created: 2024/06/23 19:23:53 by cfeliz-r          #+#    #+#             */
+/*   Updated: 2024/06/27 20:20:05 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	display_argument_error(void)
+static void	execute_command_with_path(char *command, t_pipex *pipex)
 {
-	ft_putstr_fd("Error: Bad arguments\n", 2);
-	ft_putstr_fd("Usage: ./pipex <file1> <cmd1> <cmd2> <file2>\n", 1);
+	char	**args;
+	char	*path;
+
+	args = ft_split(command, ' ');
+	path = find_command_path(args[0], pipex->envp);
+	if (path == NULL)
+	{
+		perror("PATH Not found");
+		cleanup(args, NULL, NULL);
+		exit(EXIT_FAILURE);
+	}
+	if (execve(path, args, pipex->envp) == -1)
+	{
+		perror("Error in execve");
+		cleanup(args, path, NULL);
+		exit(EXIT_FAILURE);
+	}
 }
 
-void	error(char *str)
+static void	handle_child_process(char *command, t_pipex *pipex)
 {
-	perror("Error: ");
-	ft_putstr(str);
-	exit(EXIT_FAILURE);
+	if (pipex->cmd_index == 0)
+		dup2(pipex->infile, STDIN_FILENO);
+	else
+		dup2(pipex->prev_fd, STDIN_FILENO);
+	if (pipex->cmd_index == pipex->cmd_count - 1)
+		dup2(pipex->outfile, STDOUT_FILENO);
+	else
+		dup2(pipex->fd[1], STDOUT_FILENO);
+	close(pipex->fd[0]);
+	execute_command_with_path(command, pipex);
 }
 
-static void	handle_child_process(char *input_file, char **cmd1, \
-				char **envp, int *fd)
+static void	process_commands(t_pipex *pipex)
 {
-	int	infile;
+	pid_t	pid;
 
-	infile = open(input_file, O_RDONLY);
-	if (infile == -1)
-		error("Open infile");
-	dup2(fd[1], STDOUT_FILENO);
-	dup2(infile, STDIN_FILENO);
-	close(fd[0]);
-	execute_command(cmd1, envp);
-	cleanup(cmd1, NULL, NULL);
-}
-
-static void	handle_parent_process(char *output_file, char **cmd2, \
-				char **envp, int *fd)
-{
-	int	outfile;
-
-	outfile = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (outfile == -1)
-		error("Open outfile");
-	dup2(fd[0], STDIN_FILENO);
-	dup2(outfile, STDOUT_FILENO);
-	close(fd[1]);
-	execute_command(cmd2, envp);
-	cleanup(cmd2, NULL, NULL);
+	while (pipex->cmd_index < pipex->cmd_count)
+	{
+		if (pipe(pipex->fd) == -1)
+			error("ERROR: failed pipe\n");
+		pid = fork();
+		if (pid == -1)
+			error("ERROR: failed fork\n");
+		if (pid == 0)
+			handle_child_process(pipex->commands[pipex->cmd_index], pipex);
+		else
+		{
+			waitpid(pid, NULL, 0);
+			close_fds(pipex->fd, pipex->prev_fd);
+			pipex->prev_fd = pipex->fd[0];
+			pipex->cmd_index++;
+		}
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	pid_t	pid;
-	int		fd[2];
+	int		infile;
+	int		outfile;
+	t_pipex	pipex;
 
 	if (!*envp)
-	{
-		perror("Error: Environment variable is not set!");
-		exit(EXIT_FAILURE);
-	}
-	if (argc == 5)
-	{
-		if (pipe(fd) == -1)
-			error("pipe error");
-		pid = fork();
-		if (pid == -1)
-			error("pipe error");
-		if (pid == 0)
-			handle_child_process(argv[1], ft_split(argv[2], ' '), envp, fd);
-		else
-			waitpid(pid, NULL, 0);
-		handle_parent_process(argv[4], ft_split(argv[3], ' '), envp, fd);
-	}
-	else
+		error("Error: Environment variable is not set!\n");
+	if (argc < 5)
 		display_argument_error();
+	infile = open(argv[1], O_RDONLY);
+	if (infile == -1)
+		error("Open infile");
+	outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (outfile == -1)
+		error("Open outfile");
+	pipex.infile = infile;
+	pipex.outfile = outfile;
+	pipex.prev_fd = -1;
+	pipex.cmd_count = argc - 3;
+	pipex.commands = &argv[2];
+	pipex.envp = envp;
+	pipex.cmd_index = 0;
+	process_commands(&pipex);
+	close(infile);
+	close(outfile);
 	return (0);
 }
