@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <cfeliz-r@student.your42network.  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:23:53 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/27 20:20:05 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/28 13:45:50 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	execute_command_with_path(char *command, t_pipex *pipex)
 	}
 }
 
-static void	handle_child_process(char *command, t_pipex *pipex)
+static void	child_process(char *command, t_pipex *pipex)
 {
 	if (pipex->cmd_index == 0)
 		dup2(pipex->infile, STDIN_FILENO);
@@ -59,7 +59,7 @@ static void	process_commands(t_pipex *pipex)
 		if (pid == -1)
 			error("ERROR: failed fork\n");
 		if (pid == 0)
-			handle_child_process(pipex->commands[pipex->cmd_index], pipex);
+			child_process(pipex->commands[pipex->cmd_index], pipex);
 		else
 		{
 			waitpid(pid, NULL, 0);
@@ -78,7 +78,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (!*envp)
 		error("Error: Environment variable is not set!\n");
-	if (argc < 5)
+	if (argc < 4)
 		display_argument_error();
 	infile = open(argv[1], O_RDONLY);
 	if (infile == -1)
