@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:14:45 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/27 20:14:08 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/28 16:34:21 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ void	cleanup(char **args, char *path, char **paths)
 void	display_argument_error(void)
 {
 	ft_putstr_fd("Error: Bad arguments\n", 2);
-	ft_putstr_fd("Usage: ./pipex <file> <cmd1> <cmd2> ... <file>\n", 1);
+	ft_putstr_fd("Use: ./pipex <file> <cmd1> <cmd2> ... <file>\n", 1);
+	ft_putstr_fd("Use:./pipex <here_doc> <Limiter> <cmd1> <cmd2>..<file>\n", 1);
+	exit(2);
 }
 
 void	error(char *str)

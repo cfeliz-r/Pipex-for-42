@@ -6,11 +6,11 @@
 #    By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/24 15:15:06 by cfeliz-r          #+#    #+#              #
-#    Updated: 2024/06/26 19:43:22 by cfeliz-r         ###   ########.fr        #
+#    Updated: 2024/06/28 13:55:10 by cfeliz-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = pipex.c utils.c check_and_path.c
+SRCS = pipex.c utils.c check_and_path.c here_doc.c
 OBJS = ${SRCS:.c=.o}
 NAME = pipex
 LIBFT = libft.a

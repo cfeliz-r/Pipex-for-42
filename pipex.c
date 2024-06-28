@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <cfeliz-r@student.your42network.  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:23:53 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/28 13:45:50 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/28 16:34:52 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	child_process(char *command, t_pipex *pipex)
 	execute_command_with_path(command, pipex);
 }
 
-static void	process_commands(t_pipex *pipex)
+void	process_commands(t_pipex *pipex)
 {
 	pid_t	pid;
 
@@ -80,12 +80,14 @@ int	main(int argc, char **argv, char **envp)
 		error("Error: Environment variable is not set!\n");
 	if (argc < 4)
 		display_argument_error();
+	if (ft_strcmp(argv[1], "here_doc") == 0)
+		return (handle_here_doc(argc, argv, envp), 0);
 	infile = open(argv[1], O_RDONLY);
 	if (infile == -1)
-		error("Open infile");
+		error("ERROR: open infile\n");
 	outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (outfile == -1)
-		error("Open outfile");
+		error("ERROR: open outfiles\n");
 	pipex.infile = infile;
 	pipex.outfile = outfile;
 	pipex.prev_fd = -1;
@@ -94,7 +96,5 @@ int	main(int argc, char **argv, char **envp)
 	pipex.envp = envp;
 	pipex.cmd_index = 0;
 	process_commands(&pipex);
-	close(infile);
-	close(outfile);
-	return (0);
+	return (close(infile), close(outfile), 0);
 }
