@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 13:52:55 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/28 16:37:27 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/29 13:14:05 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	handle_here_doc(int argc, char **argv, char **envp)
 	int		outfile;
 	t_pipex	pipex;
 
-	if (argc < 6 || argc == 4)
+	if (argc < 6)
 		display_argument_error();
 	create_here_doc_pipe(here_doc_pipe);
 	read_from_stdin_and_write_to_pipe(argv, here_doc_pipe);

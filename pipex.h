@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:13:02 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/28 16:37:43 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/29 12:05:59 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ void	display_argument_error(void);
 void	close_fds(int fd[2], int prev_fd);
 void	handle_here_doc(int argc, char **argv, char **envp);
 void	process_commands(t_pipex *pipex);
+void	execute_absolute_path_command(char **args, t_pipex *pipex);
 
 #endif
