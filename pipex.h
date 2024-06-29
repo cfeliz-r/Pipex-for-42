@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:13:02 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/29 12:05:59 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/29 22:43:26 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_pipex
 
 char	*find_command_path(char *cmd, char **envp);
 void	error(char *str);
-void	cleanup(char **args, char *path, char **paths);
+void	clean_up(char **args, char *path);
 void	display_argument_error(void);
 void	close_fds(int fd[2], int prev_fd);
 void	handle_here_doc(int argc, char **argv, char **envp);

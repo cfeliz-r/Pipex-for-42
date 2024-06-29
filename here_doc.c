@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 13:52:55 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/29 13:14:05 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/29 22:43:15 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ static void	read_from_stdin_and_write_to_pipe(char **argv, int here_doc_pipe[2])
 			&& line[ft_strlen(argv[2])] == '\n')
 			break ;
 		ft_putstr_fd(line, here_doc_pipe[1]);
-		free(line);
+		clean_up(NULL, line);
 	}
-	free(line);
+	clean_up(NULL, line);
 	close(here_doc_pipe[1]);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <cfeliz-r@student.your42network.  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:23:53 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/29 13:09:57 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/29 22:42:28 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ static void	execute_relative_path_command(char **args, t_pipex *pipex)
 	path = find_command_path(args[0], pipex->envp);
 	if (path == NULL)
 	{
-		cleanup(args, NULL, NULL);
-		error("PATH no encontrado");
+		clean_up(args, NULL);
+		error("PATH not found");
 	}
 	if (execve(path, args, pipex->envp) == -1)
 	{
-		cleanup(args, path, NULL);
-		error("ERROR: en execve");
+		clean_up(args, path);
+		error("ERROR: in execve");
 	}
-	free(path);
+	clean_up(NULL, path);
 }
 
 static void	execute_command_with_path(char *command, t_pipex *pipex)
@@ -35,11 +35,13 @@ static void	execute_command_with_path(char *command, t_pipex *pipex)
 	char	**args;
 
 	args = ft_split(command, ' ');
+	if (args[0] == NULL)
+		error("ERROR: command no found or is empty");
 	if (args[0][0] == '/')
 		execute_absolute_path_command(args, pipex);
 	else
 		execute_relative_path_command(args, pipex);
-	cleanup(args, NULL, NULL);
+	clean_up(args, NULL);
 }
 
 static void	child_process(char *command, t_pipex *pipex)

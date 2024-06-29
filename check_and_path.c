@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:27:25 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/29 12:09:24 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/29 22:39:40 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,8 @@ static char	*join_paths(char *dir, char *cmd)
 
 	full_path = ft_strjoin(dir, "/");
 	result = ft_strjoin(full_path, cmd);
-	free(full_path);
+	clean_up(NULL, full_path);
 	return (result);
-}
-
-static void	free_paths(char **paths)
-{
-	int	i;
-
-	i = -1;
-	while (paths[++i])
-		free(paths[i]);
-	free(paths);
 }
 
 static char	**get_paths(char **envp)
@@ -56,7 +46,7 @@ static char	*search_paths(char **paths, char *cmd)
 		res = join_paths(paths[i], cmd);
 		if (access(res, F_OK) == 0)
 		{
-			free_paths(paths);
+			clean_up(paths, NULL);
 			return (res);
 		}
 		free(res);
@@ -82,6 +72,6 @@ char	*find_command_path(char *cmd, char **envp)
 		return (NULL);
 	res = search_paths(paths, cmd);
 	if (res == NULL)
-		free_paths(paths);
+		clean_up(paths, NULL);
 	return (res);
 }

@@ -6,28 +6,25 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:14:45 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/29 13:11:10 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/06/29 22:42:01 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	cleanup(char **args, char *path, char **paths)
+void	clean_up(char **args, char *path)
 {
 	int	i;
 
 	i = -1;
 	if (path)
 		free(path);
-	if (paths)
+	if (args)
 	{
-		while (paths[++i])
-			free(paths[i]);
-		free(paths);
+		while (args[++i])
+			free(args[i]);
+		free(args);
 	}
-	while (args[++i])
-		free(args[i]);
-	free(args);
 }
 
 void	display_argument_error(void)
@@ -56,7 +53,8 @@ void	execute_absolute_path_command(char **args, t_pipex *pipex)
 {
 	if (execve(args[0], args, pipex->envp) == -1)
 	{
-		cleanup(args, NULL, NULL);
-		error("Error en execve con ruta absoluta");
+		clean_up(args, NULL);
+		perror("Error en execve con ruta absoluta");
+		exit(127);
 	}
 }
