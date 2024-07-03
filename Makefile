@@ -16,7 +16,7 @@ NAME = pipex
 LIBFT = libft.a
 LIBFT_PATH = ./libft/
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address,undefined,leak
 CC = gcc
 
 all:		${NAME}
