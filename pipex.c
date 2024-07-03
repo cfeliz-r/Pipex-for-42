@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <cfeliz-r@student.your42network.  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:23:53 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/29 22:42:28 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/07/03 12:05:19 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	execute_relative_path_command(char **args, t_pipex *pipex)
 	if (path == NULL)
 	{
 		clean_up(args, NULL);
-		error("PATH not found");
+		error("ERROR: PATH or command not found");
 	}
 	if (execve(path, args, pipex->envp) == -1)
 	{
@@ -44,7 +44,7 @@ static void	execute_command_with_path(char *command, t_pipex *pipex)
 	clean_up(args, NULL);
 }
 
-static void	child_process(char *command, t_pipex *pipex)
+static void	prepare_child_process(char *command, t_pipex *pipex)
 {
 	if (pipex->cmd_index == 0)
 		dup2(pipex->infile, STDIN_FILENO);
@@ -70,7 +70,7 @@ void	process_commands(t_pipex *pipex)
 		if (pid == -1)
 			error("ERROR: failed fork");
 		if (pid == 0)
-			child_process(pipex->commands[pipex->cmd_index], pipex);
+			prepare_child_process(pipex->commands[pipex->cmd_index], pipex);
 		else
 		{
 			waitpid(pid, NULL, 0);
@@ -96,9 +96,9 @@ int	main(int argc, char **argv, char **envp)
 	infile = open(argv[1], O_RDONLY);
 	if (infile == -1)
 		error("ERROR: open infile");
-	outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (outfile == -1)
-		error("ERROR: open outfiles");
+		error("ERROR: open outfile");
 	pipex.infile = infile;
 	pipex.outfile = outfile;
 	pipex.prev_fd = -1;

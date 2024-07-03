@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:14:45 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/29 22:42:01 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/07/03 12:29:24 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	execute_absolute_path_command(char **args, t_pipex *pipex)
 	if (execve(args[0], args, pipex->envp) == -1)
 	{
 		clean_up(args, NULL);
-		perror("Error en execve con ruta absoluta");
-		exit(127);
+		error("ERROR: absolute route not found");
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 13:52:55 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/29 22:43:15 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/07/03 12:08:42 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	open_outfile(char **argv, int argc)
 {
 	int		outfile;
 
-	outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0777);
+	outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (outfile == -1)
 		error("Open outfile");
 	return (outfile);
