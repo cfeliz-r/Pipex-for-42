@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <cfeliz-r@student.your42network.  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:23:53 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/07/03 21:54:55 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/07/04 03:36:12 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	execute_command_with_path(char *command, t_pipex *pipex)
 	char	**args;
 
 	args = ft_split(command, ' ');
-	if (args[0] == NULL || !pipex->envp)
+	if (args[0] == NULL)
 		error("ERROR: command no found or is empty");
 	if (args[0][0] == '/')
 		execute_absolute_path_command(args, pipex);
@@ -48,15 +48,18 @@ static void	prepare_child_process(char *command, t_pipex *pipex)
 {
 	if (pipex->cmd_index == 0)
 	{
-		if(pipex->infile == -1)
-			error("ERROR: infile");
+		if (pipex->infile == -1)
+			error("ERROR: to open infile");
 		dup2(pipex->infile, STDIN_FILENO);
 	}
-		
 	else
 		dup2(pipex->prev_fd, STDIN_FILENO);
 	if (pipex->cmd_index == pipex->cmd_count - 1)
+	{
+		if (pipex->outfile == -1)
+			error("ERROR: to open outfile");
 		dup2(pipex->outfile, STDOUT_FILENO);
+	}
 	else
 		dup2(pipex->fd[1], STDOUT_FILENO);
 	close(pipex->fd[0]);
@@ -89,29 +92,22 @@ void	process_commands(t_pipex *pipex)
 
 int	main(int argc, char **argv, char **envp)
 {
-	int		infile;
-	int		outfile;
 	t_pipex	pipex;
 
-	// if (!*envp)
-	// 	error("Error: Environment variable is not set!");
 	if (argc < 5)
 		display_argument_error();
 	if (ft_strcmp(argv[1], "here_doc") == 0)
-		return (handle_here_doc(argc, argv, envp), 0);
-	infile = open(argv[1], O_RDONLY);
-//	if (infile == -1)
-//		error("ERROR: open infile");
-	outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (outfile == -1)
-		error("ERROR: open outfile");
-	pipex.infile = infile;
-	pipex.outfile = outfile;
+	{
+		handle_here_doc(argc, argv, envp);
+		return (0);
+	}
+	pipex.infile = open(argv[1], O_RDONLY);
+	pipex.outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	pipex.prev_fd = -1;
 	pipex.cmd_count = argc - 3;
 	pipex.commands = &argv[2];
 	pipex.envp = envp;
 	pipex.cmd_index = 0;
 	process_commands(&pipex);
-	return (close(infile), close(outfile), 0);
+	return (0);
 }
