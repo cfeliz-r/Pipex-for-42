@@ -6,14 +6,13 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:13:02 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/06/29 22:43:26 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:21:14 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 # include <unistd.h>
-# include <string.h>
 # include <stdio.h>
 # include <sys/wait.h>
 # include "libft/libft.h"
@@ -37,6 +36,5 @@ void	display_argument_error(void);
 void	close_fds(int fd[2], int prev_fd);
 void	handle_here_doc(int argc, char **argv, char **envp);
 void	process_commands(t_pipex *pipex);
-void	execute_absolute_path_command(char **args, t_pipex *pipex);
 
 #endif

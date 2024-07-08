@@ -6,7 +6,7 @@
 #    By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/24 15:15:06 by cfeliz-r          #+#    #+#              #
-#    Updated: 2024/07/03 15:49:06 by cfeliz-r         ###   ########.fr        #
+#    Updated: 2024/07/08 12:19:00 by cfeliz-r         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = pipex
 LIBFT = libft.a
 LIBFT_PATH = ./libft/
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address,undefined,leak
+CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address,undefined,leak
 CC = gcc
 
 all:		${NAME}

@@ -6,7 +6,7 @@
 /*   By: cfeliz-r <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:14:45 by cfeliz-r          #+#    #+#             */
-/*   Updated: 2024/07/03 12:29:24 by cfeliz-r         ###   ########.fr       */
+/*   Updated: 2024/07/08 12:07:39 by cfeliz-r         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,4 @@ void	close_fds(int fd[2], int prev_fd)
 	close(fd[1]);
 	if (prev_fd != -1)
 		close(prev_fd);
-}
-
-void	execute_absolute_path_command(char **args, t_pipex *pipex)
-{
-	if (execve(args[0], args, pipex->envp) == -1)
-	{
-		clean_up(args, NULL);
-		error("ERROR: absolute route not found");
-	}
 }
